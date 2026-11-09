@@ -1,0 +1,20 @@
+[Unit]
+Description=DeepSeek-V4.1-Flash-1017 EXL3 2.50bpw Abliterated TensorFold (2x DGX Spark)
+After=network-online.target docker.service
+StartLimitIntervalSec=30min
+StartLimitBurst=3
+
+[Service]
+Type=simple
+WorkingDirectory=%h/DeepSeek-v4.1-Flash-1017-2x-DGX-Sparks
+Environment=FOREGROUND=1
+Environment=PREPARE=0
+ExecStart=%h/DeepSeek-v4.1-Flash-1017-2x-DGX-Sparks/start.sh
+ExecStop=%h/DeepSeek-v4.1-Flash-1017-2x-DGX-Sparks/stop.sh
+Restart=on-failure
+RestartSec=60
+TimeoutStartSec=900
+TimeoutStopSec=120
+
+[Install]
+WantedBy=default.target

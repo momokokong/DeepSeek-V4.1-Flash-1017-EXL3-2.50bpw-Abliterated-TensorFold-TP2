@@ -1,0 +1,16 @@
+# scripts/local.sh — Golden Configuration for 2x DGX Spark (GB10 128GB)
+# E1 Hybrid Pack: vcruz305 2.50bpw experts + bertholomus EXL3 non-experts + drowzeys 1017 Abliterated wo_b (l10..35)
+# Result: 84.72 GiB rank-cache per node (~16.5 - 17.5 GiB MemAvailable free on both nodes under 250K / 4-way concurrency)
+
+WORKER=user@192.168.200.13
+MODEL_ID=local/dsv41-2.50bpw-ablit-tp2
+MODEL_REVISION=e1ablit250bpw000000000000000000000000001
+ABLIT=0
+SERVED_NAME=deepseek-v4-flash-dspark
+CONTEXT=250000
+POOL=524288
+PARALLEL=4
+MAX_TOKENS=8192
+THINKING=0
+MIN_AVAIL_GIB=102
+MEMGUARD_GIB=2.5
