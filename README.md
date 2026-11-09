@@ -33,6 +33,11 @@ By inspecting the tensor layouts across upstream checkpoints, we discovered:
 | **`model-00001-of-00015.safetensors`**<br/>*(Hosted on Hugging Face Delta Pack)* | `6.74 GiB` | `3,571` | • Base non-expert EXL3 layers from `bertholomus/DeepSeek-V4.1-Flash-1017-EXL3-2.5bpw`<br/>• Grafted `104` abliterated `layers.10..35.attn.wo_b` tensors from `drowzeys/keys-DeepSeek-V4.1-Flash-1017-Abliterated`<br/>• TensorFold loader compatibility fixes: `mtp.2.markov_head.{embed,head}.weight`, `layers.{1,14}.engram.{q,k}_weight` widened `BF16 → F32`, and all 43 `ffn.gate.bias_vl` tensors for 1017 vision routing |
 | **`model-00002-of-00015.safetensors`**<br/>*(Hosted on Hugging Face Delta Pack)* | `6.00 GiB` | `8,519` | • Pure `.ffn.experts.` EXL3 tensors extracted from `vcruz305` shard 2 (stripping the 218 incompatible FP8 non-expert tensors) |
 | **`model-00003..00015-of-00015.safetensors`**<br/>*(Hardlinked from `vcruz305`)* | `155.25 GiB` | `180,409` | • Pure `.ffn.experts.` EXL3 tensors hardlinked directly from `vcruz305/DSV4.1-Flash-1017-DERISKED-EXL3-2.50bpw` (`model-00003..00015-of-00017.safetensors`, **0 extra disk usage**) |
+| **`model.safetensors.index.json`**<br/>*(Hosted on Hugging Face Delta Pack)* | `14.7 MB` | `192,499` indexed | • Complete 15-shard index mapping all 192,499 keys across shards 00001–00015 |
+| **Config, Tokenizer & Engram Assets**<br/>*(Hosted on Hugging Face Delta Pack)* | `~7.0 MB` | — | • `config.json`, `generation_config.json`<br/>• `tokenizer.json`, `tokenizer_config.json`<br/>• `chat_template.jinja` (essential for OpenAI chat completions)<br/>• `engram_token_map.u32` (essential 517 KB table for Engram hardware routing) |
+
+> [!NOTE]
+> ⚠️ **`engram_token_map.u32`** and **`chat_template.jinja`** are strictly required: the former is the token index table for Engram, and the latter defines the chat formatting. Missing either file will cause TensorFold or chat requests to fail.
 
 ---
 
