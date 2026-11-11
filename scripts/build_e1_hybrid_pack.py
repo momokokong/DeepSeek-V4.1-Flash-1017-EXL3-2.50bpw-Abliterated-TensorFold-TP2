@@ -314,7 +314,15 @@ def main():
     with open(os.path.join(args.out_dir, "model.safetensors.index.json"), "w", encoding="utf-8") as f:
         json.dump(index_obj, f, indent=2)
 
-    shutil.copy2(os.path.join(args.bert_dir, "config.json"), os.path.join(args.out_dir, "config.json"))
+    with open(os.path.join(args.bert_dir, "config.json"), "r", encoding="utf-8") as f:
+        cfg_obj = json.load(f)
+    qc = cfg_obj.get("quantization_config", {})
+    if "bits" in qc and not isinstance(qc["bits"], int):
+        qc.pop("bits")
+        qc["avg_bits"] = 2.5
+    with open(os.path.join(args.out_dir, "config.json"), "w", encoding="utf-8") as f:
+        json.dump(cfg_obj, f, indent=4)
+        f.write("\n")
     for fname in ("tokenizer.json", "tokenizer_config.json", "generation_config.json", "chat_template.jinja", "engram_token_map.u32", "LICENSE"):
         for src_root in (args.vcruz_dir, args.bert_dir):
             cand = os.path.join(src_root, fname)
